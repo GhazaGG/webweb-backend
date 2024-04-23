@@ -1,13 +1,20 @@
-const express = require('express')
-const {getDataBuku, getDataBukuById, createDataBuku,UpdateDataBuku,DeleteDataBuku} = require("../controller/DataBukuController")
-
-
+const express = require('express');
 const router = express.Router();
+const bookController = require('../controller/DataBukuController');
 
-router.get('/databuku', getDataBuku);
-router.get('/databuku/:id', getDataBukuById);
-router.post('/databuku', createDataBuku);
-router.patch('/databuku/:id', UpdateDataBuku);
-router.delete('/databuku/:id', DeleteDataBuku);
+// GET all books
+router.get('/databuku', bookController.getDataBuku);
+
+// GET a book by ID
+router.get('/databuku/:id', bookController.getDataBukuById);
+
+// POST a new book
+router.post('/databuku', bookController.createDataBuku);
+
+// PUT update a book by ID
+router.patch('/databuku/:id', bookController.updateDataBuku);
+
+// DELETE a book by ID
+router.delete('/databuku/:id', bookController.deleteDataBuku);
 
 module.exports = router;

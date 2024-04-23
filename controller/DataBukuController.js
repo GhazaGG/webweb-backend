@@ -1,66 +1,63 @@
-const { where } = require("sequelize");
-const DataBuku = require("../models/DataBukuModel")
+const Book = require('../models/DataBukuModel');
 
-const getDataBuku = async(req, res) => {
+const getDataBuku = async (req, res) => {
     try {
-        const response = await DataBuku.findAll();
+        const response = await Book.find();
         res.status(200).json(response);
     } catch (error) {
-        console.log(error.message)
-    };
-};
-
-const getDataBukuById = async(req, res) => {
-    try {
-        const response = await DataBuku.findOne({
-            where: {
-                id : req.params.id
-            }
-        });
-        res.status(200).json(response);
-    } catch (error) {
-        console.log(error.message)
-    };
-};
-
-
-const createDataBuku = async(req, res) => {
-    try {
-        await DataBuku.create(req.body);
-
-        res.status(201).json({msg:"data buku telah dibuat."});
-    } catch (error) {
-        console.log(error.message)
-    };
-};
-
-const UpdateDataBuku = async(req, res) => {
-    try {
-        await DataBuku.update(req.body,{
-            where:{
-                id: req.params.id
-            }
-        });
-
-        res.status(200).json({msg:"data buku telah diubah."});
-    } catch (error) {
-        console.log(error.message)
-    };
-};
-
-const DeleteDataBuku = async(req, res) => {
-    try {
-        await DataBuku.destroy({
-            where: {
-                id: req.params.id
-            }
-        });
-        res.status(200).json({msg:"Data buku telah dihapus."});
-    } catch (error) {
-        console.log(error.message);
+        console.error(error.message);
         res.status(500).json({ error: "Internal Server Error" });
     }
 };
 
+const getDataBukuById = async (req, res) => {
+    try {
+        const response = await Book.findById(req.params.id);
+        if (!response) {
+            return res.status(404).json({ error: "Data not found" });
+        }
+        res.status(200).json(response);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};
 
-module.exports = {getDataBuku, getDataBukuById, createDataBuku, UpdateDataBuku, DeleteDataBuku};
+const createDataBuku = async (req, res) => {
+    try {
+        const newBook = new Book(req.body);
+        await newBook.save();
+        res.status(201).json({ msg: "Data buku telah dibuat.", data: newBook });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+
+const updateDataBuku = async (req, res) => {
+    try {
+        const updatedBook = await Book.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!updatedBook) {
+            return res.status(404).json({ error: "Data not found" });
+        }
+        res.status(200).json({ msg: "Data buku telah diubah.", data: updatedBook });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+
+const deleteDataBuku = async (req, res) => {
+    try {
+        const deletedBook = await Book.findByIdAndDelete(req.params.id);
+        if (!deletedBook) {
+            return res.status(404).json({ error: "Data not found" });
+        }
+        res.status(200).json({ msg: "Data buku telah dihapus.", data: deletedBook });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+
+module.exports = { getDataBuku, getDataBukuById, createDataBuku, updateDataBuku, deleteDataBuku };
