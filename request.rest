@@ -1,0 +1,38 @@
+GET http://localhost:5000/databuku
+
+###
+GET http://localhost:5000/databuku/1
+
+
+###
+POST http://localhost:5000/databuku
+Content-Type: application/json
+
+{
+    "kode_buku": "ABC123231",
+    "isbn": "178-0-321-23123-72",
+    "judul_buku": "mencoba ngirim",
+    "pengarang": "GhazaGG",
+    "sekilas_isi": "Ini adalah sekilas isi buku",
+    "tanggal_masuk": "2024-04-23",
+    "stok": 10,
+    "foto": "http://example.com/gambar.jpg"
+}
+
+
+###
+PATCH  http://localhost:5000/databuku/1
+Content-Type: application/json
+
+{
+    "kode_buku": "ABC123123",
+    "isbn": "978-0-306-32142-7",
+    "judul_buku": "Menulis Buku",
+    "pengarang": "Nama Pengarang",
+    "sekilas_isi": "Ini adalah sekilas isi buku.",
+    "tanggal_masuk": "2024-04-23",
+    "stok": 10,
+    "foto": "http://example.com/gambar.jpg"
+}
+###
+DELETE http://localhost:3000/databuku/4
